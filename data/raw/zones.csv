@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 Zone,Landmark
 Koramangala,Sony Signal
 Koramangala,Forum Mall
@@ -39,3 +40,16 @@ Banashankari,BSK BDA Complex
 Banashankari,BSK TTMC
 Banashankari,BSK 2nd Stage
 Banashankari,BSK Metro Station
+=======
+Zone,Location
+Koramangala,Sony World Signal
+Indiranagar,100 Feet Road
+MG Road,Brigade Road
+Whitefield,ITPL Main Gate
+Electronic City,Infosys Gate 1
+Yeshwantpur,Railway Station
+Jayanagar,4th Block Complex
+Marathahalli,Kalamandir Theatre
+Hebbal,Esteem Mall
+Banashankari,BDA Complex
+>>>>>>> 5f1fda4dcf77b2f24b4e72d55d792ebdf1691ca9
