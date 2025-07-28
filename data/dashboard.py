@@ -10,7 +10,7 @@ st.set_page_config(page_title="Rapido vs Namma Yatri - Auto Reviews Analysis", l
 st.title("🚖 Rapido vs Namma Yatri - Reviews Dashboard (Auto Only)")
 
 # Load the data
-df = pd.read_csv("app_reviews_auto_sentiment.csv")
+df = pd.read_csv("data/app_reviews_auto_sentiment.csv")
 df["at"] = pd.to_datetime(df["at"], errors="coerce", dayfirst=True)
 df.dropna(subset=["at"], inplace=True)
 
