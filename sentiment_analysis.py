@@ -1,13 +1,33 @@
 import pandas as pd
 from textblob import TextBlob
 
-# Load the dataset
 df = pd.read_csv("data/app_reviews.csv")
 
-# Drop rows with missing review content
+
+df = df.loc[:, ~df.columns.str.contains("^Unnamed")]
+
+
 df = df.dropna(subset=["content"])
 
-# Function to get sentiment label
+
+df["content_lower"] = df["content"].str.lower()
+
+
+auto_keywords = ["auto", "rickshaw", "meter", "three wheeler", "autorickshaw"]
+bike_keywords = ["bike", "rider", "helmet", "two wheeler"]
+cab_keywords = ['ac cab', 'cab', 'taxi', 'car', 'vehicle', 'sedan', 'suv', 
+                'taxi driver', 'cab driver', 'xl cab', 'xl premium', 'non ac cab']
+
+df["is_auto_review"] = df["content_lower"].apply(
+    lambda x: any(keyword in x for keyword in auto_keywords)
+)
+
+df_auto = df[df["is_auto_review"]]
+df_auto = df_auto[
+    ~df_auto["content_lower"].str.contains('|'.join(bike_keywords + cab_keywords))
+]
+
+
 def get_sentiment(text):
     polarity = TextBlob(text).sentiment.polarity
     if polarity > 0.1:
@@ -17,15 +37,17 @@ def get_sentiment(text):
     else:
         return "Neutral"
 
-# Apply sentiment analysis
-df["sentiment"] = df["content"].apply(get_sentiment)
+df_auto["sentiment"] = df_auto["content"].apply(get_sentiment)
 
-# Remove any unnamed columns (commonly index columns accidentally saved)
-df = df.loc[:, ~df.columns.str.contains('^Unnamed')]
+df_auto.to_csv("data/app_reviews_auto_sentiment.csv", index=False)
 
-# Save the results
-df.to_csv("data/app_reviews_with_sentiment.csv", index=False)
 
-# Grouped sentiment counts per app
-summary = df.groupby(["app", "sentiment"]).size().unstack().fillna(0)
+summary = df_auto.groupby(["app", "sentiment"]).size().unstack().fillna(0)
+
+
+summary["Total Auto Reviews"] = summary.sum(axis=1)
+
+
 print(summary)
+
+summary.to_csv("data/app_reviews_auto_sentiment_summary.csv")
